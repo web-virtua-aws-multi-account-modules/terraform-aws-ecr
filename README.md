@@ -41,7 +41,7 @@ provider "aws" {
 
 ## Features enable of S3 Ecr repository configurations for this module:
 
-- Policy
+- Lifecycle Policy
 - Scanning Configuration
 - Encryption Configuration
 - Image Mutability
@@ -53,7 +53,7 @@ provider "aws" {
 
 ```hcl
 module "registry_test" {
-  source        = "./create-ecr"
+  source        = "web-virtua-aws-multi-account-modules/ecr/aws"
   registry_name = "tf-registry-test"
   mutability_type = "IMMUTABLE"
   force_delete = false
@@ -71,7 +71,7 @@ module "registry_test" {
 
 ```hcl
 module "registry_test" {
-  source        = "./create-ecr"
+  source        = "web-virtua-aws-multi-account-modules/ecr/aws"
   registry_name = "tf-registry-test"
   mutability_type = "IMMUTABLE"
   force_delete = false
@@ -114,7 +114,7 @@ module "registry_test" {
 | Name | Description |
 |------|-------------|
 | `ecr` | All informations of the registry |
-| `ecr_policy` | The lifecycle policy for images |
 | `ecr_arn` | The ARN of the registry |
+| `ecr_policy` | The lifecycle policy for images |
 | `ecr_registry_id` | The ECR registry ID |
 | `ecr_repository_url` | The ECR registry URL |
