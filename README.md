@@ -90,7 +90,7 @@ module "registry_test" {
 ## Variables
 
 | Name | Type | Default | Required | Description | Options |
-|------|-------------|------|---------|:--------:|:--------:|
+|------|-------------|------|---------|:--------:|:--------|
 | registry_name | `string` | `-` | yes | Name to ECR Registry | `-` |
 | mutability_type | `string` | `IMMUTABLE` | no | Mutability type | `*`MUTABLE<br> `*`IMMUTABLE<br> |
 | force_delete | `bool` | `false` | no | Force delete images | `*`false <br> `*`true |
