@@ -39,9 +39,10 @@ provider "aws" {
 ```
 
 
-## Features enable of S3 Ecr repository configurations for this module:
+## Features enabled for ECR repository configurations in this module:
 
 - Lifecycle Policy
+- Repository Policy
 - Scanning Configuration
 - Encryption Configuration
 - Image Mutability
@@ -56,10 +57,12 @@ module "registry_test" {
   source        = "web-virtua-aws-multi-account-modules/ecr/aws"
   registry_name = "tf-registry-test"
   mutability_type = "IMMUTABLE"
-  force_delete = false
-  scan_on_push = false
-  ou_name = var.ous.sso
-  policy = local.policy_test
+  force_delete    = false
+  scan_on_push    = true
+  ou_name         = var.ous.sso
+  
+  repository_policy = local.repo_policy
+  lifecycle_policy  = local.lifecycle_policy
 
   providers = {
     aws = aws.luby_sso
@@ -74,10 +77,12 @@ module "registry_test" {
   source        = "web-virtua-aws-multi-account-modules/ecr/aws"
   registry_name = "tf-registry-test"
   mutability_type = "IMMUTABLE"
-  force_delete = false
-  scan_on_push = false
-  ou_name = var.ous.sso
-  policy = local.policy_test
+  force_delete    = false
+  scan_on_push    = true
+  ou_name         = var.ous.sso
+  
+  repository_policy = local.repo_policy
+  lifecycle_policy  = local.lifecycle_policy
   encryption_type = "KMS"
   kms_arn = "arn:aws:kms:us-east-':123456789012:key/32aaa...d24eb2"
 
@@ -94,12 +99,13 @@ module "registry_test" {
 | registry_name | `string` | `-` | yes | Name to ECR Registry | `-` |
 | mutability_type | `string` | `IMMUTABLE` | no | Mutability type | `*`MUTABLE<br> `*`IMMUTABLE<br> |
 | force_delete | `bool` | `false` | no | Force delete images | `*`false <br> `*`true |
-| scan_on_push | `bool` | `false` | no | Scanning images | `*`false <br> `*`true |
-| policy | `string` | `null` | no |Lifecycle policy of images | `-` |
-| encryption_type | `string` | `AES256` | no | Versioning to bucket | `*`AES256<br> `*`KMS<br> |
-| kms_arn | `string` | `null` | no | Versioning to bucket | `-` |
-| ou_name | `string` | `no` | no | Policy of ACL | `-` |
-| tags | `map(any)` | `{}` | no | Tags to bucket | `-` |
+| scan_on_push | `bool` | `true` | no | Indicates whether images are scanned after being pushed | `*`false <br> `*`true |
+| repository_policy | `any` | `null` | no | Repository access policy | `-` |
+| lifecycle_policy | `any` | `null` | no | Lifecycle rules policy | `-` |
+| encryption_type | `string` | `AES256` | no | Encryption type | `*`AES256<br> `*`KMS<br> |
+| kms_arn | `string` | `null` | no | ARN of the KMS key | `-` |
+| ou_name | `string` | `no` | no | Organization unit name | `-` |
+| tags | `map(any)` | `{}` | no | Tags to repository | `-` |
 
 
 ## Resources
@@ -107,7 +113,8 @@ module "registry_test" {
 | Name | Type |
 |------|------|
 | [aws_ecr_repository.create_ecr](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository) | resource |
-| [aws_ecr_lifecycle_policy.create_police](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_lifecycle_policy) | resource |
+| [aws_ecr_lifecycle_policy.create_lifecycle_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_lifecycle_policy) | resource |
+| [aws_ecr_repository_policy.create_repository_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository_policy) | resource |
 
 ## Outputs
 
@@ -115,6 +122,7 @@ module "registry_test" {
 |------|-------------|
 | `ecr` | All informations of the registry |
 | `ecr_arn` | The ARN of the registry |
-| `ecr_policy` | The lifecycle policy for images |
+| `lifecycle_policy` | The lifecycle policy for images |
+| `repository_policy` | The repository access policy |
 | `ecr_registry_id` | The ECR registry ID |
 | `ecr_repository_url` | The ECR registry URL |

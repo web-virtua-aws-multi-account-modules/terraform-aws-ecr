@@ -3,9 +3,14 @@ output "ecr" {
   value       = aws_ecr_repository.create_ecr
 }
 
-output "ecr_policy" {
-  description = "ECR policy"
-  value       = aws_ecr_lifecycle_policy.create_police
+output "lifecycle_policy" {
+  description = "ECR lifecycle policy"
+  value       = try(aws_ecr_lifecycle_policy.create_lifecycle_policy[0], null)
+}
+
+output "repository_policy" {
+  description = "ECR repository access policy"
+  value       = try(aws_ecr_repository_policy.create_repository_policy[0], null)
 }
 
 output "ecr_arn" {

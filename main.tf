@@ -19,8 +19,14 @@ resource "aws_ecr_repository" "create_ecr" {
   })
 }
 
-resource "aws_ecr_lifecycle_policy" "create_police" {
-  count      = var.policy != null ? 1 : 0
+resource "aws_ecr_lifecycle_policy" "create_lifecycle_policy" {
+  count      = var.lifecycle_policy != null ? 1 : 0
   repository = aws_ecr_repository.create_ecr.name
-  policy     = var.policy
+  policy     = var.lifecycle_policy
+}
+
+resource "aws_ecr_repository_policy" "create_repository_policy" {
+  count      = var.repository_policy != null ? 1 : 0
+  repository = aws_ecr_repository.create_ecr.name
+  policy     = var.repository_policy
 }

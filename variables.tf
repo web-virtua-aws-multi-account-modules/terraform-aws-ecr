@@ -3,8 +3,14 @@ variable "registry_name" {
   type        = string
 }
 
-variable "policy" {
-  description = "Policy File"
+variable "repository_policy" {
+  description = "Repository policy to control access permissions"
+  type        = any
+  default     = null
+}
+
+variable "lifecycle_policy" {
+  description = "Lifecycle policy rules to manage image expiration"
   type        = any
   default     = null
 }
@@ -22,9 +28,9 @@ variable "force_delete" {
 }
 
 variable "scan_on_push" {
-  description = "If true will delete the repository and images"
+  description = "Indicates whether images are scanned after being pushed to the repository"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "encryption_type" {
